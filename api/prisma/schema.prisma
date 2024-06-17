@@ -8,66 +8,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id             Int             @id @default(autoincrement())
-  email          String          @unique
-  password       String
-  firstName      String
-  lastName       String
-  address        String?
-  healthInsurance HealthInsurance?
-  appointments   Appointment[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+
+enum Role {
+  admin
+  user
+  professional
 }
 
-model HealthInsurance { //Obra social
-  id               Int       @id @default(autoincrement())
-  name             String
-  plan             String
-  memberId         String
-  user             User      @relation(fields: [userId], references: [id])
-  userId           Int       @unique
-  professional     Professional? @relation(fields: [professionalId], references: [id], name: "ProfessionalHealthInsurances")
-  professionalId   Int?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-}
-
-model Appointment {
-  id             Int           @id @default(autoincrement())
-  date           DateTime
-  userId         Int
-  user           User          @relation(fields: [userId], references: [id])
-  status         AppointmentStatus
-  professionalId Int
-  professional   Professional  @relation(fields: [professionalId], references: [id])
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-}
-
-model Professional {
-  id               Int              @id @default(autoincrement())
-  firstName        String
-  lastName         String
-  address          String
-  schedules        Schedule[]
-  appointments     Appointment[]
-  healthInsurances HealthInsurance[] @relation("ProfessionalHealthInsurances")
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-}
-
-model Schedule {
-  id            Int           @id @default(autoincrement())
-  day           String
-  startTime     String
-  endTime       String
-  professionalId Int
-  professional  Professional  @relation(fields: [professionalId], references: [id])
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-}
 
 enum AppointmentStatus {
   PENDING
@@ -75,6 +22,81 @@ enum AppointmentStatus {
   CANCELED
   NO_SHOW
 }
+
+model User {
+  dni             String          @id @unique
+  email           String          @unique
+  password        String
+  nombre          String
+  apellido        String
+  domicilio       String
+  telefono        String
+  healthInsurance HealthInsurance?
+  appointments    Appointment[]
+  role            Role            @default(user)  //Tiene como default el rol de user
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model ObraSocial {
+  id               Int               @id 
+  nombre           String            @unique
+  healthInsurances HealthInsurance[]
+  professionals    Professional[]    @relation("ProfessionalObraSociales")
+}
+
+
+model HealthInsurance { //Obra social
+  id               Int           @id @default(autoincrement())    
+  obraSocial       ObraSocial    @relation(fields: [obraSocialId], references: [id])
+  obraSocialId     Int            
+  plan             String
+  numeroAfiliado   String
+  user             User           @relation(fields: [userDni], references: [dni])
+  userDni          String         @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+
+model Appointment {
+  id              Int           @id @default(autoincrement())
+  fecha           DateTime
+  hora            String
+  user            User          @relation(fields: [userDni], references: [dni])
+  userDni         String
+  status          AppointmentStatus
+  professional    Professional  @relation(fields: [professionalDni], references: [dni])
+  professionalDni String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Professional {
+  dni              String          @id @unique
+  nombre           String
+  apellido         String
+  password         String
+  precioConsulta   Int
+  obraSociales     ObraSocial[]    @relation("ProfessionalObraSociales")  
+  schedules        Schedule[]
+  appointments     Appointment[]
+  role             Role              @default(professional)  //Tiene como default el rol de professional
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Schedule {
+  id              Int           @id @default(autoincrement())
+  fecha           String
+  horaInicio      String
+  horaFinal       String
+  professional    Professional  @relation(fields: [professionalDni], references: [dni])
+  professionalDni String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
 
 
 //* PARA SINCRONIZAR LAS TABLAS/MIGRACIONES CREADAS EN PRISMA CON EL LETOR DE BASE DE DATOS (TABLE PLUS O PGADMIN).

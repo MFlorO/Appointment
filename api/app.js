@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes/index.js'); 
 const app = express()
-const { DB_PORT } = require('./env.js');
+const { PORT } = require('./env.js');
 
 
 //middlewares
@@ -26,10 +26,10 @@ app.use((req, res, next) => {
 
 
 //routes
-app.use('/', routes); //De esta forma se modulariza 
+app.use('/', routes); //De esta forma se modularizan las rutas
 
 
 //listen port
-app.listen((DB_PORT || 3001), async () => {
-	console.log(`Server listening at ${DB_PORT || 3001}`.bgCyan.white);
+app.listen((PORT || 3001), async () => {
+	console.log(`Server listening at ${PORT || 3001}`.bgCyan.white);
 });
