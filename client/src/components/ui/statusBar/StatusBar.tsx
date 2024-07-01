@@ -18,12 +18,12 @@ const StatusBar = ({ bgColor = "bg-[#80ADB9]", title, arrow=true, menu=true }:Pr
   const router = useRouter()
 
   return (
-    <div className={`flex w-full h-[${HEIGHT_STATUS_BAR}] items-center justify-between ${bgColor} sm:px-[${PADDING_MOBILE}] lg:px-[${PADDING_DESKTOP}]`}>
-      <div>
+    <div className={`flex w-full h-[${HEIGHT_STATUS_BAR}] items-center justify-center ${bgColor} px-[${PADDING_MOBILE}] md:px-[${PADDING_DESKTOP}]`}>
+      <div className={`absolute left-[${PADDING_MOBILE}] md:left-[${PADDING_DESKTOP}]`}>
         { arrow && <IoIosArrowBack color='white' cursor='pointer' onClick={() => router.back()} /> }
       </div> 
       <p className="text-[16px] font-normal">{title}</p>
-      <div>
+      <div className={`absolute right-[${PADDING_MOBILE}] md:right-[${PADDING_DESKTOP}]`}>
         { menu && <IoMenu color="white" /> }
       </div>
     </div>

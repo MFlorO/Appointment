@@ -64,7 +64,7 @@ model Appointment {
   fecha           DateTime
   hora            String
   user            User          @relation(fields: [userDni], references: [dni])
-  userDni         String
+  userDni         String         
   status          AppointmentStatus
   professional    Professional  @relation(fields: [professionalDni], references: [dni])
   professionalDni String
@@ -73,12 +73,12 @@ model Appointment {
 }
 
 model Professional {
-  dni              String          @id @unique
+  dni              String           @id @unique
   nombre           String
   apellido         String
   password         String
   precioConsulta   Int
-  obraSociales     ObraSocial[]    @relation("ProfessionalObraSociales")  
+  obraSociales     ObraSocial[]      @relation("ProfessionalObraSociales")  
   schedules        Schedule[]
   appointments     Appointment[]
   role             Role              @default(professional)  //Tiene como default el rol de professional

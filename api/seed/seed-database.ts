@@ -8,9 +8,9 @@ async function main (){
     try {
         
         //* 1. Borrar registros previos en las tablas
-        await prisma.appointment.deleteMany();
         await prisma.healthInsurance.deleteMany();
         await prisma.schedule.deleteMany();
+        await prisma.appointment.deleteMany();
         await prisma.obraSocial.deleteMany();
         await prisma.user.deleteMany();
         await prisma.professional.deleteMany();
@@ -22,8 +22,8 @@ async function main (){
         await prisma.obraSocial.createMany({
             data: [
               { id: 1, nombre: 'osde' },
-              { id: 2, nombre: 'swissMedical' },
-              { id: 3, nombre: 'prevencionSalud' },
+              { id: 2, nombre: 'swiss medical' },
+              { id: 3, nombre: 'prevencion salud' },
               { id: 4, nombre: 'omint' },
               { id: 5, nombre: 'apross' },
             ],
@@ -37,7 +37,7 @@ async function main (){
 
        initialData.professionals.forEach( async (professional) => {
 
-            const { obraSociales, schedules, appointments:appoimentNotUse, dni, ...rest } = professional;
+            const { obraSociales, schedules, appointments:appoimentNotUse, ...rest } = professional;
 
             // Obtener las obras sociales existentes por ID de la obra social
             const existingObraSociales = await prisma.obraSocial.findMany({
@@ -47,28 +47,10 @@ async function main (){
                     },
                 },
             });
-
-            // Obtener los appoiments existentes por professionalDni
-            const existingAppointments = await prisma.appointment.findMany({
-                where: {
-                    professionalDni: dni,
-                },
-            });
-
-            for (const appointment of existingAppointments) {
-                await prisma.appointment.create({
-                  data: {
-                    ...appointment,
-                    professionalDni: dni,
-                  }
-                });
-            }
-
             
             await prisma.professional.create({
                 data: {
                     ...rest,
-                    dni,
                     obraSociales: {
                       connect: existingObraSociales.map(os => ({ id: os.id })),
                     },
@@ -78,9 +60,6 @@ async function main (){
                           horaInicio: schedule.horaInicio,
                           horaFinal: schedule.horaFinal,
                         })),
-                    },
-                    appointments: {
-                        connect: existingAppointments.map(os => ({ id: os.id })),
                     }
                 }
             })
@@ -128,25 +107,35 @@ async function main (){
                 console.log(`Esquema healthInsurance creado con éxito para el user: ${dni}`);
             }
 
+            
             // Crear citas del usuario
-            for (const appointment of appointments) {
-                await prisma.appointment.create({
-                    data: {
-                        ...appointment,
-                        userDni: dni
-                    }
-                });
+            if (appointments) {
+                appointments.forEach(async (appointment) => {
+                    const professionalExists = await prisma.professional.findUnique({
+                        where: { dni: appointment.professionalDni }
+                    });
 
+                    if (!professionalExists) {
+                        console.error(`Profesional con DNI ${appointment.professionalDni} no existe.`);
+                        return;
+                    }
+
+                    await prisma.appointment.create({
+                        data: {
+                            ...appointment,
+                            userDni: dni,
+                        }
+                    });
+
+                    console.log(`Esquema appointment creado con éxito para el user: ${dni}`);
+                });
             }
-            console.log(`Esquema appointment creado con éxito para el user: ${dni}`);
         })
         console.log('Esquema user creado con éxito ');
 
 
 
         console.log('Datos sembrados correctamente');
-
-
 
   } catch (error) {
     console.error('Error al sembrar datos:', error);

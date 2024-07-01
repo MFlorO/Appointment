@@ -29,7 +29,9 @@ const ButtonStyle = ({ text, bgColor, colorText, borderColor, redirect = false, 
 
   return (
     <div 
-    className={`w-full h-[55px] ${bgColor} ${colorText} border-2 ${borderColor} text-[1.2em] flex items-center justify-center font-light rounded-[90px] p-4 cursor-pointer`} 
+    className={`w-full h-[55px] ${bgColor} ${colorText} border-2 ${borderColor} text-[1.2em] flex items-center justify-center font-light rounded-[90px] p-4 cursor-pointer
+    transition-opacity duration-300 delay-150 hover:opacity-90
+    `} 
     onClick={onHandleClick}
     as='button'
     >{text}</div>

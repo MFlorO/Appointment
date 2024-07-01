@@ -1,27 +1,35 @@
+import { PORT_BACKEND } from '@/constants';
 
 
-export async function signup(email: string, password: string) {
-  const response = await fetch('http://localhost:3001/api/auth/register', {
+export async function signup(
+  nombre: string, apellido:string, dni:string, domicilio:string, email: string, area: string, telefono: string,  password: string, 
+  isObraSocial:string, obraSocialId:number, numeroAfiliado: string, plan:string 
+) {
+
+  const response = await fetch(`${PORT_BACKEND}/auth/register`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre, apellido, dni, domicilio, email, area, telefono, password, isObraSocial, obraSocialId, numeroAfiliado, plan }),
   });
 
-  const data = await response.json();
-  return data;
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Error al registrar el usuario');
+  }
+
+  return response.json();
 }
 
 
-export const login = async (email: string, password: string) => {
+
+export const login = async (dni: string, password: string) => {
   try {
-    const res = await fetch('http://localhost:3001/login', {
+    const res = await fetch(`${PORT_BACKEND}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ dni, password }),
     });
 
     const data = await res.json();
