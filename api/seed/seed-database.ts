@@ -8,9 +8,9 @@ async function main (){
     try {
         
         //* 1. Borrar registros previos en las tablas
+        await prisma.appointment.deleteMany();
         await prisma.healthInsurance.deleteMany();
         await prisma.schedule.deleteMany();
-        await prisma.appointment.deleteMany();
         await prisma.obraSocial.deleteMany();
         await prisma.user.deleteMany();
         await prisma.professional.deleteMany();
@@ -131,9 +131,9 @@ async function main (){
                 });
             }
         })
+
+
         console.log('Esquema user creado con éxito ');
-
-
 
         console.log('Datos sembrados correctamente');
 

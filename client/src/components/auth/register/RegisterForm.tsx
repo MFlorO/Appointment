@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ButtonForm, InputStyles } from "@/components";
-import { getObrasSociales, signup } from "@/lib/api";
+import { getObrasSociales, register } from "@/lib/api";
 import { FormDataRegister } from "@/interfaces/form";
 import { validateForm } from "@/functions";
 
@@ -66,7 +66,6 @@ const RegisterForm = () => {
     setError(resultErrors);
   };
 
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -85,11 +84,10 @@ const RegisterForm = () => {
     
     try {
       
-      const response = await signup(nombre, apellido, dni, domicilio, email, area, telefono, password, isObraSocial, obraSocialId, numeroAfiliado, plan);
-      console.log('response-handleSubmit: ', response)
+      const response = await register(nombre, apellido, dni, domicilio, email, area, telefono, password, isObraSocial, obraSocialId, numeroAfiliado, plan);
 
       // Guardar el token en localStorage
-      localStorage.setItem('token-appointment-app', response.token);
+      // localStorage.setItem('token-appointment-app', response.token);
 
       //setear el formulario
       setFormData({
@@ -119,6 +117,7 @@ const RegisterForm = () => {
     }
   };
 
+  
   return (
     <form className="flex flex-col w-full gap-6" onSubmit={handleSubmit}>
 

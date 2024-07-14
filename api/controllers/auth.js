@@ -83,9 +83,7 @@ const registerUser = async (req, res) => {
         }
 
         //* Generar el token JWT
-        const token = jwt.sign({ userId: newUser.dni, email: newUser.email }, JWT_SECRET, {
-            expiresIn: '1h',
-        });
+        const token = jwt.sign({ dni: newUser.dni, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).json({ ok: true,  token });
         
@@ -101,30 +99,53 @@ const registerUser = async (req, res) => {
 };
 
 
-
 // Login de usuario
 const loginUser = async (req, res) => {
     const { dni, password } = req.body;
 
-    const user = await prisma.user.findUnique({ where: { dni } });
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+    //* Validar campos obligatorios
+    if (!dni || !password) {
+        return res.status(400).json({ ok: false, error: 'Todos los campos son obligatorios' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-        return res.status(401).json({ error: 'Invalid password' });
+    //* Validar la contraseña (ejemplo: longitud mínima de 6 caracteres, una letra mayúscula y almenos una letra minúscula)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ ok: false, error: 'La contraseña debe tener al menos 6 caracteres, una letra mayúscula y una letra minúscula' });
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-        expiresIn: '1h',
-    });
+    try {
 
+        //Busco el usuario en mi base de datos
+        const user = await prisma.user.findUnique({ where: { dni } });
+
+        if (!user) {
+            return res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
+        }
+
+        const token = jwt.sign({ dni: user.dni }, JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({ ok: true, token });
+        
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+    }
+};
+
+
+// Renovar el token
+const renewToken = (req, res) => {
+    const { dni, email } = req.user; // Obtenido del middleware de autenticación
+    const token = jwt.sign({ dni }, JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
 };
 
 
-
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, renewToken };

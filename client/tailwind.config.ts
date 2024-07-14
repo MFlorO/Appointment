@@ -7,6 +7,15 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    keyframes: {
+      loading: {
+        '0%': { backgroundPosition: '1em 0' },
+        '100%': { backgroundPosition: '0 0' },
+      },
+    },
+    animation: {
+      loading: 'loading 1s linear infinite',
+    },
     screens: {
       'sm': '640px',
       // => @media (min-width: 640px) { ... }

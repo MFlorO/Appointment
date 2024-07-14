@@ -3,6 +3,7 @@ const router = express.Router();
 const authRoutes = require('./auth');
 const appointmentRoutes = require('./appointment');
 const obrasociales = require('./obrasociales')
+const perfil = require('./perfil')
 
 
 // Ruta de bienvenida
@@ -16,6 +17,9 @@ router.use('/appointment', appointmentRoutes);
 
 // Rutas de obrasociales
 router.use('/obrasociales', obrasociales);
+
+// Rutas del perfil
+router.use('/perfil', perfil);
 
 
 module.exports = router;

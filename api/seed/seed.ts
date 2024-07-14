@@ -17,7 +17,7 @@ interface SeedUser {
   domicilio: string;
   telefono: string;
   healthInsurance: SeedHealthInsurance | null;
-  role: 'user' | 'admin';
+  rol: 'user' | 'admin';
   appointments: SeedAppointment[];
 }
 
@@ -30,7 +30,7 @@ interface SeedProfessional {
   precioConsulta: number;
   schedules: SeedSchedule[];
   obraSociales: ObraSocial[];
-  role: 'professional';
+  rol: 'professional';
   appointments: SeedAppointment[];
 }
 
@@ -80,7 +80,7 @@ export const initialData: SeedData = {
         dni: '38411057',
         domicilio: 'Avenida Corrientes 5663',
         telefono: '351-152436007',
-        role: 'user',
+        rol: 'user',
         healthInsurance:{
           obraSocialId: 1,
           plan: "210",
@@ -88,18 +88,56 @@ export const initialData: SeedData = {
         },
         appointments: [
           {
-            fecha: new Date('2024-06-15'),
+            fecha: new Date('2024-09-15'),
             hora: '09:20',
             status: 'PENDING',
             professionalDni: '87654321',
             userDni: '38411057',
           },
           {
-            fecha: new Date('2024-06-15'),
+            fecha: new Date('2024-07-15'),
             hora: '14:20',
             status: 'ATTENDED',
             professionalDni: '98765432',
             userDni: '38411057',
+          },
+        ],
+      },
+      {
+        email: 'test@hotmail.com',
+        password: bcrypt.hashSync('Fo123456', 10),
+        nombre: 'Fernando',
+        apellido: 'Castro',
+        dni: '38411077',
+        domicilio: 'Avenida Corrientes 5663',
+        telefono: '351-152436007',
+        rol: 'user',
+        healthInsurance:{
+          obraSocialId: 2,
+          plan: "210",
+          numeroAfiliado: "15612"
+        },
+        appointments: [
+          {
+            fecha: new Date('2024-08-15'),
+            hora: '09:20',
+            status: 'PENDING',
+            professionalDni: '98765432',
+            userDni: '38411077',
+          },
+          {
+            fecha: new Date('2024-07-14'),
+            hora: '14:20',
+            status: 'ATTENDED',
+            professionalDni: '98765432',
+            userDni: '38411077',
+          },
+          {
+            fecha: new Date('2024-07-18'),
+            hora: '14:20',
+            status: 'ATTENDED',
+            professionalDni: '98765432',
+            userDni: '38411077',
           },
         ],
       },
@@ -143,7 +181,7 @@ export const initialData: SeedData = {
             nombre: 'swissMedical'
           }, 
         ],
-        role: 'professional',
+        rol: 'professional',
         appointments: [
           {
             fecha: new Date('2024-06-15'),
@@ -170,7 +208,7 @@ export const initialData: SeedData = {
               nombre: 'swissMedical'
             }, 
         ],
-        role: 'professional',
+        rol: 'professional',
         appointments: [
           {
             fecha: new Date('2024-06-15'),

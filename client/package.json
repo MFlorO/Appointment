@@ -11,19 +11,20 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "clsx": "^2.1.1",
+    "jwt-decode": "^4.0.0",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.14.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.5.3"
   }
 }

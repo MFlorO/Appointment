@@ -1,8 +1,7 @@
 import { PORT_BACKEND } from '@/constants';
 
 
-export async function signup(
-  nombre: string, apellido:string, dni:string, domicilio:string, email: string, area: string, telefono: string,  password: string, 
+export async function register( nombre: string, apellido:string, dni:string, domicilio:string, email: string, area: string, telefono: string,  password: string, 
   isObraSocial:string, obraSocialId:number, numeroAfiliado: string, plan:string 
 ) {
 
@@ -40,7 +39,6 @@ export const login = async (dni: string, password: string) => {
 
     return data;
   } catch (error) {
-    // Type guard to ensure `error` is an instance of Error
     if (error instanceof Error) {
       throw new Error(error.message);
     } else {

@@ -22,7 +22,7 @@ const StatusBar = ({ bgColor = "bg-[#80ADB9]", title, arrow=true, menu=true }:Pr
       <div className={`absolute left-[${PADDING_MOBILE}] md:left-[${PADDING_DESKTOP}]`}>
         { arrow && <IoIosArrowBack color='white' cursor='pointer' onClick={() => router.back()} /> }
       </div> 
-      <p className="text-[16px] font-normal">{title}</p>
+      <p className="text-[16px] font-medium">{title}</p>
       <div className={`absolute right-[${PADDING_MOBILE}] md:right-[${PADDING_DESKTOP}]`}>
         { menu && <IoMenu color="white" /> }
       </div>

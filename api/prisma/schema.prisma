@@ -9,7 +9,7 @@ datasource db {
 }
 
 
-enum Role {
+enum Rol {
   admin
   user
   professional
@@ -33,7 +33,7 @@ model User {
   telefono        String
   healthInsurance HealthInsurance?
   appointments    Appointment[]
-  role            Role            @default(user)  //Tiene como default el rol de user
+  rol             Rol               @default(user)  //Tiene como default el rol de user
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 }
@@ -81,7 +81,7 @@ model Professional {
   obraSociales     ObraSocial[]      @relation("ProfessionalObraSociales")  
   schedules        Schedule[]
   appointments     Appointment[]
-  role             Role              @default(professional)  //Tiene como default el rol de professional
+  rol             Rol                @default(professional)  //Tiene como default el rol de professional
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 }

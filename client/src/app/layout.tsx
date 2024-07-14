@@ -14,11 +14,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <Providers> */}
-          <main>
-            {children}
-          </main>
-        {/* </Providers> */}
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

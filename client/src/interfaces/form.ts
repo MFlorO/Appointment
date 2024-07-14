@@ -12,3 +12,8 @@ export interface FormDataRegister {
     numeroAfiliado: string,
     plan: string
 }
+
+export interface FormDataLogin {
+    password: string,
+    dni: string,
+}
